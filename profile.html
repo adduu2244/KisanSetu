@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanSetu - Farmer Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Linked directly to your structured layout asset -->
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body class="min-h-screen text-[#1a2e1d] font-sans flex overflow-hidden relative bg-cover bg-center bg-no-repeat bg-fixed" 
+      style="background-image: linear-gradient(rgba(220, 240, 228, 0.75), rgba(220, 240, 228, 0.8)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <!-- Ambient Glow Engines -->
+    <div class="bg-glow-green"></div>
+    <div class="bg-glow-gold"></div>
+
+    <!-- 1. IDENTICAL GLASS SIDEBAR MATCHING DASHBOARD -->
+    <aside class="w-64 sidebar-glass p-5 flex flex-col justify-between hidden md:flex shrink-0 h-screen z-20 relative">
+        <div class="space-y-7">
+            <div class="flex items-center gap-3 pb-3 border-b border-white/40">
+                <span class="text-3xl filter drop-shadow">🌾</span>
+                <h2 class="text-xl font-black text-[#142917] tracking-tight">KisanSetu</h2>
+            </div>
+
+            <nav class="space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📊</span> Dashboard
+    </a>
+    <a href="/products" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📦</span> Products
+    </a>
+    <a href="/orders" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📥</span> Orders
+    </a>
+    <a href="/earnings" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">💰</span> Earnings
+    </a>
+    <a href="/profile" class="flex items-center gap-3.5 px-4 py-3 bg-white/45 backdrop-blur-md text-[#142917] font-black text-base rounded-xl shadow-sm border-t border-l border-white/60 transition-all">
+        <span class="text-xl">👤</span> Profile
+    </a>
+</nav>
+        </div>
+
+        <!-- 3D Floating Glass Ornament Card -->
+        <div class="ultra-glass my-6 p-4 rounded-2xl relative overflow-hidden text-center border border-white/40 shadow-xl">
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white/60 backdrop-blur-md border border-white rounded-full flex items-center justify-center text-xl mx-auto mb-2 shadow-sm">✨</div>
+                <h4 class="text-xs font-black text-[#142917] tracking-wide uppercase">Krishi Support</h4>
+                <p class="text-[10px] text-emerald-950 font-bold mt-1 leading-normal">Need assistance with listings or market rates?</p>
+                <button class="mt-3 w-full bg-[#164e29]/90 hover:bg-[#164e29] text-white text-[11px] font-black py-2 px-3 rounded-xl shadow-md transition-all border border-t border-l border-emerald-700">Get Help Now</button>
+            </div>
+        </div>
+
+        <!-- User Information Block -->
+        <div class="border-t border-white/40 pt-4 flex flex-col gap-3 mt-auto">
+            <div class="flex items-center gap-3">
+                <div id="sidebarAvatar" class="w-10 h-10 rounded-xl bg-[#164e29] text-white flex items-center justify-center text-md font-black shadow-lg">F</div>
+                <div>
+                    <p id="sidebarName" class="text-xs font-black text-gray-900 leading-tight">Farmer</p>
+                    <p id="sidebarVerified" class="text-[10px] text-emerald-950 font-extrabold mt-0.5 bg-white/50 backdrop-blur-sm px-2 py-0.5 rounded-md border border-white/60 shadow-xs">Verified Farmer</p>
+                </div>
+            </div>
+            <button id="logoutButton" class="w-full text-left text-[11px] font-black text-[#164e29] bg-white/30 hover:bg-white/60 py-3 px-4 rounded-xl border border-white/50 shadow-sm transition-all">
+                🚪 Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- 2. INTERACTIVE PROFILE HUB -->
+    <main class="flex-1 p-6 overflow-y-auto h-screen w-full z-10 relative">
+        
+        <!-- SIDE-BY-SIDE HEADER LAYOUT (MATCHING EARNINGS & PRODUCTS) -->
+        <div class="w-full flex flex-row justify-between items-center mb-8 gap-6">
+            
+            <!-- FIXED WIDTH HORIZONTAL GLASS BOX HEADING -->
+            <div class="ultra-glass p-5 rounded-2xl border border-white/40 shadow-md w-full max-w-xl shrink">
+                <h1 class="text-2xl font-black tracking-tight text-[#0f2112]">Farmer Profile Configuration</h1>
+                <p class="text-xs text-emerald-950/90 font-extrabold mt-1.5 hidden sm:block leading-relaxed">
+                    Update your regional verification details, farm metrics, and public marketplace credentials.
+                </p>
+            </div>
+            
+            <!-- LOCKED CONTENT-SIZED ACTION BUTTON -->
+            <button id="saveProfileBtn" type="button" class="w-fit bg-[#164e29] hover:bg-[#0f381d] text-white px-6 py-2.5 rounded-xl font-black text-xs tracking-wide transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-emerald-950/10 active:scale-95 border-t border-l border-emerald-500/50 shrink-0 whitespace-nowrap h-fit">
+                💾 Save Changes
+            </button>
+        </div>
+
+        <!-- TWO-COLUMN PROFILE GRID PATTERN -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            
+            <!-- LEFT COLUMN: AVATAR CARD & QUICK METRICS (BOX TYPE) -->
+            <div class="space-y-6 lg:col-span-1">
+                <div class="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-white/70 shadow-lg flex flex-col items-center text-center">
+                    <div class="relative group">
+                        <div class="w-24 h-24 rounded-2xl bg-[#164e29] text-white flex items-center justify-center text-3xl font-black shadow-xl border-2 border-white">
+                            F
+                        </div>
+                        <div class="absolute inset-0 bg-black/40 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                            <span class="text-white text-xs font-black">📷 Edit</span>
+                        </div>
+                    </div>
+                    
+                    <h2 id="profileNameDisplay" class="text-xl font-black text-[#0f2112] mt-4">Farmer</h2>
+                    <span class="text-[10px] px-3 py-1 rounded-full font-black bg-emerald-200 text-emerald-950 border border-emerald-300 mt-1.5">Verified Farmer</span>
+                    
+                    <div class="w-full grid grid-cols-2 gap-2 mt-6 pt-6 border-t border-black/5">
+                        <div class="bg-white/40 p-3 rounded-xl border border-white/60">
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Market Rating</p>
+                            <p class="text-base font-black text-gray-900 mt-0.5">⭐ 4.9</p>
+                        </div>
+                        <div class="bg-white/40 p-3 rounded-xl border border-white/60">
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Total Sales</p>
+                            <p class="text-base font-black text-[#164e29] mt-0.5">86+ Qtl</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SYSTEM METRIC BADGES -->
+                <div class="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/70 shadow-lg space-y-3">
+                    <h3 class="text-xs font-black text-emerald-900/60 uppercase tracking-wider mb-2">Account Standings</h3>
+                    <div class="flex items-center justify-between text-xs font-bold text-emerald-950 bg-white/40 px-3 py-2.5 rounded-xl border border-white/60">
+                        <span>KYC Verification</span>
+                        <span class="text-[10px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">COMPLETED</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-bold text-emerald-950 bg-white/40 px-3 py-2.5 rounded-xl border border-white/60">
+                        <span>Direct Bank Payouts</span>
+                        <span class="text-[10px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: CORE DATA FIELDS FORM (BOX TYPE) -->
+            <div class="lg:col-span-2">
+                <form id="profileForm" class="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-white/70 shadow-lg space-y-6">
+                    
+                    <!-- Section 1: Personal Details -->
+                    <div>
+                        <h3 class="text-sm font-black text-[#0f2112] border-b border-black/5 pb-2 mb-4">Personal Identification</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-emerald-900 uppercase mb-1.5 tracking-wider">Full Legal Name</label>
+                                <input id="profileNameInput" type="text" value="" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-800/10">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-emerald-900 uppercase mb-1.5 tracking-wider">Contact Number</label>
+                                <input type="tel" value="+91 98765 43210" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-800/10">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-[10px] font-black text-emerald-900 uppercase mb-1.5 tracking-wider">Primary Delivery / Farm Address</label>
+                                <input type="text" value="Village Sukhpur, Block B, District Karnal, Haryana" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-800/10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Farm Metrics -->
+                    <div>
+                        <h3 class="text-sm font-black text-[#0f2112] border-b border-black/5 pb-2 mb-4">Agricultural Operational Metrics</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-emerald-900 uppercase mb-1.5 tracking-wider">Total Cultivated Land (Acres)</label>
+                                <input type="number" value="12" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-800/10">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-emerald-900 uppercase mb-1.5 tracking-wider">Primary Crop Classification</label>
+                                <select class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-800/10">
+                                    <option selected>🌾 Grains / Rice / Wheat</option>
+                                    <option>🍅 Vegetables / Fresh Crops</option>
+                                    <option>🍎 Fruits Orchard Stock</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Connected Banking -->
+                    <div>
+                        <h3 class="text-sm font-black text-[#0f2112] border-b border-black/5 pb-2 mb-4">Financial Remittance Endpoint</h3>
+                        <div class="bg-white/40 p-4 rounded-xl border border-white/60 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Linked Settlement Bank</p>
+                                <p class="text-sm font-black text-gray-900 mt-0.5">State Bank of India</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Account Remittance Number</p>
+                                <p class="text-sm font-black text-gray-900 mt-0.5">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4321</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="/static/js/sidebar.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const nameInput = document.getElementById('profileNameInput');
+        const nameDisplay = document.getElementById('profileNameDisplay');
+
+        // try localStorage first
+        const lsName = localStorage.getItem('name');
+        if(lsName){
+            if(nameInput) nameInput.value = lsName;
+            if(nameDisplay) nameDisplay.textContent = lsName;
+        }
+
+        // also try fetching current profile from API to keep in sync
+        (async ()=>{
+            const token = localStorage.getItem('token');
+            if(!token){
+                alert('Please login to edit your profile.');
+                window.location.href = '/login';
+                return;
+            }
+            try{
+                const res = await fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + token } });
+                if(!res.ok) {
+                    const body = await res.json().catch(()=>({}));
+                    if(res.status === 401) {
+                        alert(body.message || 'Session expired. Please login again.');
+                        localStorage.removeItem('token');
+                        window.location.href = '/login';
+                        return;
+                    }
+                    return;
+                }
+                const profile = await res.json();
+                if(profile.name){
+                    if(nameInput) nameInput.value = profile.name;
+                    if(nameDisplay) nameDisplay.textContent = profile.name;
+                    try{ localStorage.setItem('name', profile.name); }catch(e){}
+                }
+                if(profile.photo_url) try{ localStorage.setItem('photo', profile.photo_url); }catch(e){}
+                if(typeof loadSidebar === 'function') loadSidebar();
+            }catch(e){ console.warn('Could not fetch profile', e); }
+        })();
+
+        const saveButton = document.getElementById('saveProfileBtn');
+        const submitProfileUpdate = async () => {
+            const name = (nameInput && nameInput.value) ? nameInput.value.trim() : '';
+            const token = localStorage.getItem('token');
+            if(!token){ alert('Please login to update your profile'); return; }
+            try{
+                console.log('Profile update token:', token);
+                const res = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ name })
+                });
+
+                const data = await res.json().catch(()=>({}));
+                console.log('Profile update response:', res.status, data);
+                if(!res.ok){
+                    if(res.status === 401){
+                        alert(data.message || 'Session expired. Please login again.');
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('name');
+                        localStorage.removeItem('photo');
+                        localStorage.removeItem('verified');
+                        window.location.href = '/login';
+                        return;
+                    }
+                    const message = data.message || `Failed to update profile (${res.status})`;
+                    alert(message);
+                    return;
+                }
+
+                // success — update UI and cache
+                const profile = data;
+                if(nameDisplay) nameDisplay.textContent = profile.name || 'Farmer';
+                try{ localStorage.setItem('name', profile.name || ''); }catch(e){}
+                if(profile.photo_url) try{ localStorage.setItem('photo', profile.photo_url); }catch(e){}
+                try{ localStorage.setItem('verified', profile.verified ? 'true' : 'false'); }catch(e){}
+                if(typeof loadSidebar === 'function') loadSidebar();
+                alert('Profile updated successfully!');
+            }catch(err){
+                console.error('Profile update failed', err);
+                alert('Failed to update profile');
+            }
+        };
+
+        if(saveButton){
+            saveButton.addEventListener('click', submitProfileUpdate);
+        }
+
+        const profileForm = document.getElementById('profileForm');
+        if(profileForm){
+            profileForm.addEventListener('submit', function(e){
+                e.preventDefault();
+                submitProfileUpdate();
+            });
+        }
+    });
+    </script>
+</body>
+</html>

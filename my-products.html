@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanSetu - Inventory Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Linked directly to your structured layout asset -->
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body class="min-h-screen text-[#1a2e1d] font-sans flex overflow-hidden relative bg-cover bg-center bg-no-repeat bg-fixed" 
+      style="background-image: linear-gradient(rgba(220, 240, 228, 0.75), rgba(220, 240, 228, 0.8)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <!-- Ambient Glow Engines -->
+    <div class="bg-glow-green"></div>
+    <div class="bg-glow-gold"></div>
+
+    <!-- 1. IDENTICAL GLASS SIDEBAR MATCHING DASHBOARD -->
+    <aside class="w-64 sidebar-glass p-5 flex flex-col justify-between hidden md:flex shrink-0 h-screen z-20 relative">
+        <div class="space-y-7">
+            <div class="flex items-center gap-3 pb-3 border-b border-white/40">
+                <span class="text-3xl filter drop-shadow">🌾</span>
+                <h2 class="text-xl font-black text-[#142917] tracking-tight">KisanSetu</h2>
+            </div>
+
+            <!-- Active routing updated to emphasize tracking location -->
+            <nav class="space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📊</span> Dashboard
+    </a>
+    <a href="/products" class="flex items-center gap-3.5 px-4 py-3 bg-white/45 backdrop-blur-md text-[#142917] font-black text-base rounded-xl shadow-sm border-t border-l border-white/60 transition-all">
+        <span class="text-xl">📦</span> Products
+    </a>
+    <a href="/orders" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📥</span> Orders
+    </a>
+    <a href="/earnings" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">💰</span> Earnings
+    </a>
+    <a href="/profile" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">👤</span> Profile
+    </a>
+</nav>
+        </div>
+
+        <!-- 3D Floating Glass Ornament Card -->
+        <div class="ultra-glass my-6 p-4 rounded-2xl relative overflow-hidden text-center border border-white/40 shadow-xl">
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white/60 backdrop-blur-md border border-white rounded-full flex items-center justify-center text-xl mx-auto mb-2 shadow-sm">✨</div>
+                <h4 class="text-xs font-black text-[#142917] tracking-wide uppercase">Krishi Support</h4>
+                <p class="text-[10px] text-emerald-950 font-bold mt-1 leading-normal">Need assistance with listings or market rates?</p>
+                <button class="mt-3 w-full bg-[#164e29]/90 hover:bg-[#164e29] text-white text-[11px] font-black py-2 px-3 rounded-xl shadow-md transition-all border border-t border-l border-emerald-700">Get Help Now</button>
+            </div>
+        </div>
+
+        <!-- User Information Block -->
+        <div class="border-t border-white/40 pt-4 flex flex-col gap-3 mt-auto">
+            <div class="flex items-center gap-3">
+                <div id="sidebarAvatar" class="w-10 h-10 rounded-xl bg-[#164e29] text-white flex items-center justify-center text-md font-black shadow-lg">F</div>
+                <div>
+                    <p id="sidebarName" class="text-xs font-black text-gray-900 leading-tight">Farmer</p>
+                    <p id="sidebarVerified" class="text-[10px] text-emerald-950 font-extrabold mt-0.5 bg-white/50 backdrop-blur-sm px-2 py-0.5 rounded-md border border-white/60 shadow-xs">Verified Farmer</p>
+                </div>
+            </div>
+            <button id="logoutButton" class="w-full text-left text-[11px] font-black text-[#164e29] bg-white/30 hover:bg-white/60 py-3 px-4 rounded-xl border border-white/50 shadow-sm transition-all">
+                🚪 Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- 2. INVENTORY MARKETPLACE INTERACTIVE HUB -->
+    <main class="flex-1 p-6 overflow-y-auto h-screen w-full z-10 relative">
+        
+        <!-- SIDE-BY-SIDE HEADER LAYOUT -->
+        <div class="w-full flex flex-row justify-between items-center mb-8 gap-6">
+            
+            <!-- FIXED WIDTH HORIZONTAL GLASS BOX HEADING -->
+            <div class="ultra-glass p-5 rounded-2xl border border-white/40 shadow-md w-full max-w-xl shrink">
+                <h1 class="text-2xl font-black tracking-tight text-[#0f2112]">My Crops Marketplace</h1>
+                <p class="text-xs text-emerald-950/90 font-extrabold mt-1.5 hidden sm:block leading-relaxed">
+                    Manage listed inventory stocks and control global supply pricing channels.
+                </p>
+            </div>
+            
+            <!-- LOCKED CONTENT-SIZED SMALL ADD STOCK BUTTON -->
+            <button onclick="toggleProductModal(true)" class="w-fit bg-[#164e29] hover:bg-[#0f381d] text-white px-5 py-2.5 rounded-xl font-black text-xs tracking-wide transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-emerald-950/10 active:scale-95 border-t border-l border-emerald-500/50 shrink-0 whitespace-nowrap h-fit">
+                <span class="text-sm">➕</span> Add New Stock
+            </button>
+        </div>
+
+        <!-- DEFINED GRID PATTERN WITH DISTINCT BOX TYPES -->
+        <div id="productContainer"
+     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Item Box Card 1 -->
+            <div class="bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col justify-between border border-white/70 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-3xl bg-white/90 p-2 rounded-xl border border-white shadow-sm">🌾</span>
+                        <span class="text-[10px] px-2.5 py-1 rounded-full font-black bg-emerald-200 text-emerald-950 border border-emerald-300">In Stock</span>
+                    </div>
+                    <h3 class="text-lg font-black text-[#0f2112]">Premium Basmati Rice</h3>
+                    <p class="text-xs text-emerald-950/80 font-bold mt-2 leading-relaxed">Organically processed, long-grain high-purity yield harvested fresh from autumn tracks.</p>
+                    
+                    <!-- Inner Grid Layout -->
+                    <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-black/5">
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Available Weight</p>
+                            <p class="text-sm font-black text-gray-900 mt-0.5">1,200 kg</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Price / Quintal</p>
+                            <p class="text-sm font-black text-[#164e29] mt-0.5">₹6,500</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/40 border-t border-white/60 flex gap-2">
+                    <button class="flex-1 text-[11px] font-black text-[#164e29] bg-white/80 hover:bg-white py-2 rounded-xl transition-all border border-white/80 shadow-xs">Edit Metrics</button>
+                    <button class="text-[11px] font-black text-red-700 bg-red-100/60 hover:bg-red-100 py-2 px-3 rounded-xl transition-all border border-red-200/50 shadow-xs">🗑️</button>
+                </div>
+            </div>
+
+            <!-- Item Box Card 2 -->
+            <div class="bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col justify-between border border-white/70 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-3xl bg-white/90 p-2 rounded-xl border border-white shadow-sm">🍅</span>
+                        <span class="text-[10px] px-2.5 py-1 rounded-full font-black bg-amber-200 text-amber-950 border border-amber-300">Low Stock</span>
+                    </div>
+                    <h3 class="text-lg font-black text-[#0f2112]">Organic Hybrid Tomatoes</h3>
+                    <p class="text-xs text-emerald-950/80 font-bold mt-2 leading-relaxed">Farm-fresh, perfectly ripe red tomatoes sorted by rigorous cold storage quality checks.</p>
+                    
+                    <!-- Inner Grid Layout -->
+                    <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-black/5">
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Available Weight</p>
+                            <p class="text-sm font-black text-red-700 font-extrabold mt-0.5">12 kg</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Price / Quintal</p>
+                            <p class="text-sm font-black text-[#164e29] mt-0.5">₹3,200</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/40 border-t border-white/60 flex gap-2">
+                    <button class="flex-1 text-[11px] font-black text-[#164e29] bg-white/80 hover:bg-white py-2 rounded-xl transition-all border border-white/80 shadow-xs">Edit Metrics</button>
+                    <button class="text-[11px] font-black text-red-700 bg-red-100/60 hover:bg-red-100 py-2 px-3 rounded-xl transition-all border border-red-200/50 shadow-xs">🗑️</button>
+                </div>
+            </div>
+
+            <!-- Item Box Card 3 -->
+            <div class="bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col justify-between border border-white/70 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-3xl bg-white/90 p-2 rounded-xl border border-white shadow-sm">🥔</span>
+                        <span class="text-[10px] px-2.5 py-1 rounded-full font-black bg-emerald-200 text-emerald-950 border border-emerald-300">In Stock</span>
+                    </div>
+                    <h3 class="text-lg font-black text-[#0f2112]">Fresh Russet Potatoes</h3>
+                    <p class="text-xs text-emerald-950/80 font-bold mt-2 leading-relaxed">High starch content variety clean potatoes, optimized structurally for restaurant distribution logistics.</p>
+                    
+                    <!-- Inner Grid Layout -->
+                    <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-black/5">
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Available Weight</p>
+                            <p class="text-sm font-black text-gray-900 mt-0.5">850 kg</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-900/60 uppercase tracking-wider">Price / Quintal</p>
+                            <p class="text-sm font-black text-[#164e29] mt-0.5">₹1,800</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/40 border-t border-white/60 flex gap-2">
+                    <button class="flex-1 text-[11px] font-black text-[#164e29] bg-white/80 hover:bg-white py-2 rounded-xl transition-all border border-white/80 shadow-xs">Edit Metrics</button>
+                    <button class="text-[11px] font-black text-red-700 bg-red-100/60 hover:bg-red-100 py-2 px-3 rounded-xl transition-all border border-red-200/50 shadow-xs">🗑️</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 3. DETACHED 3D GLASS MODAL LAYER -->
+    <div id="productModal" class="fixed inset-0 z-50 overflow-hidden bg-emerald-950/20 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="ultra-glass max-w-md w-full rounded-2xl p-6 border border-white/50 shadow-2xl relative">
+            
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/30">
+                <h2 class="text-xl font-black text-[#0f2112]">List New Fresh Crop</h2>
+                <button onclick="toggleProductModal(false)" class="text-xl font-black hover:scale-110 transition-transform text-emerald-950">✕</button>
+            </div>
+
+            <!-- Form Framework -->
+             <form class="space-y-4" onsubmit="addProduct(event)">
+            
+                <div>
+                    <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Crop Classification Category</label>
+                    <select id="category" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:bg-white">
+                        <option>🌾 Grains / Rice / Wheat</option>
+                        <option>🍅 Vegetables / Fresh Crops</option>
+                        <option>🍎 Fruits Orchard Stock</option>
+                        <option>🌱 Seeds / Fertilizer Goods</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Product Custom Name</label>
+                    <input id="productName" type="text" placeholder="e.g., Organic Yellow Corn" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 placeholder-emerald-950/40 focus:outline-none focus:bg-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Total Weight (Kg)</label>
+                        <input id="quantity" type="number" placeholder="500" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 placeholder-emerald-950/40 focus:outline-none focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Price / Quintal</label>
+                        <input id="price" type="number" placeholder="₹2,500" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 placeholder-emerald-950/40 focus:outline-none focus:bg-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Market Description</label>
+                    <textarea rows="2" placeholder="Describe quality, harvest dates..." class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 placeholder-emerald-950/40 focus:outline-none focus:bg-white"></textarea>
+                </div>
+
+                <button type="submit" class="w-full mt-2 bg-[#164e29] hover:bg-[#0f381d] text-white font-black text-sm py-3 rounded-xl shadow-lg transition-all border border-t border-l border-emerald-600">
+                    Publish to Marketplace Server
+                </button>
+            </form>
+        </div>
+    </div>
+
+   <script>
+
+function toggleProductModal(show) {
+    const modal = document.getElementById('productModal');
+
+    if(show){
+        modal.classList.remove('hidden');
+    } else {
+        modal.classList.add('hidden');
+    }
+}
+
+async function addProduct(event) {
+
+    event.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const name = document.getElementById("productName").value;
+    const quantity = document.getElementById("quantity").value;
+    const price = document.getElementById("price").value;
+    const category = document.getElementById("category").value;
+
+    const res = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+            name,
+            quantity,
+            price,
+            category
+        })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        alert("Product Added Successfully 🌾");
+        toggleProductModal(false);
+        loadProducts();
+    } else {
+        alert(data.message);
+    }
+}
+
+async function loadProducts() {
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("/api/products", {
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    const products = await res.json();
+
+    const container = document.getElementById("productContainer");
+
+    container.querySelectorAll('.db-product-card').forEach(card => card.remove());
+
+    const filteredProducts = products.filter(product => {
+        const name = String(product.name || '').trim().toLowerCase();
+        return name !== 'mangoes';
+    });
+
+    filteredProducts.forEach(product => {
+
+        container.innerHTML += `
+        <div class="db-product-card bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col justify-between border border-white/70 shadow-lg">
+
+            <div class="p-5">
+
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-3xl bg-white/90 p-2 rounded-xl border border-white shadow-sm">
+                        🌾
+                    </span>
+
+                    <span class="text-[10px] px-2.5 py-1 rounded-full font-black bg-emerald-200 text-emerald-950 border border-emerald-300">
+                        In Stock
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-black text-[#0f2112]">
+                    ${product.name}
+                </h3>
+
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-black/5">
+
+                    <div>
+                        <p class="text-[9px] font-black text-emerald-900/60 uppercase">
+                            Available Weight
+                        </p>
+
+                        <p class="text-sm font-black text-gray-900">
+                            ${product.quantity} kg
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-[9px] font-black text-emerald-900/60 uppercase">
+                            Price / Quintal
+                        </p>
+
+                        <p class="text-sm font-black text-[#164e29]">
+                            ₹${product.price}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        `;
+    });
+}
+
+loadProducts();
+
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('add') === '1') {
+        toggleProductModal(true);
+    }
+})();
+
+</script>
+<script src="/static/js/sidebar.js"></script>
+</body>
+</html>

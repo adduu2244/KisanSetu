@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanSetu - Ultra Glassmorphism Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* THE ULTIMATE INTENSE GLASS ENGINE */
+        .ultra-glass {
+            background: rgba(255, 255, 255, 0.22) !important;
+            backdrop-filter: blur(24px) saturate(210%) !important;
+            -webkit-backdrop-filter: blur(24px) saturate(210%) !important;
+            
+            /* Sharp glossy 3D highlight lines */
+            border-top: 1px solid rgba(255, 255, 255, 0.65) !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.65) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+            
+            /* Deep glass physical shadow drop */
+            box-shadow: 0 12px 35px 0 rgba(15, 38, 22, 0.12) !important;
+        }
+        
+        /* FIXED SIDEBAR ENGINE: dropped opacity to 0.15 to let grains show beautifully */
+        .sidebar-glass {
+            background: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(35px) saturate(220%) !important;
+            -webkit-backdrop-filter: blur(35px) saturate(220%) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 6px 0 35px 0 rgba(15, 38, 22, 0.15) !important;
+        }
+
+        /* High-intensity background ambient lights to filter color through the glass panels */
+        .bg-glow-green {
+            position: absolute;
+            top: -10%;
+            left: 5%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.35) 0%, rgba(240,249,244,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bg-glow-gold {
+            position: absolute;
+            bottom: -5%;
+            right: 5%;
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.35) 0%, rgba(240,249,244,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Smooth UI Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chart-canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(22, 78, 41, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+    <style>
+      /* Market Rate Assistant modal styles and animations */
+      #marketModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
+      #marketModal.show{display:flex}
+      #marketModal .modal-overlay{position:absolute;inset:0;background:rgba(15,38,22,0.45);backdrop-filter:blur(4px)}
+      #marketPanel{transform:translateY(12px) scale(.98);opacity:0;transition:all .28s cubic-bezier(.2,.9,.2,1);max-width:780px}
+      #marketPanel.show{transform:translateY(0) scale(1);opacity:1}
+      @media (max-width:640px){
+        #marketPanel{width:92%}
+      }
+      .market-result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.03)}
+      .trend-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800}
+      .trend-rising{background:#e6ffef;color:#0f6f3b}
+      .trend-falling{background:#fff1f0;color:#8b1e1e}
+      .trend-stable{background:#f7f7f7;color:#6b6b6b}
+    </style>
+</head>
+<!-- Background covers full screen window seamlessly across sidebar boundary -->
+<body class="min-h-screen text-[#1a2e1d] font-sans flex overflow-y-auto relative bg-cover bg-center bg-no-repeat bg-fixed" 
+      style="background-image: linear-gradient(rgba(220, 240, 228, 0.75), rgba(220, 240, 228, 0.8)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <!-- High-power ambient lighting engine -->
+    <div class="bg-glow-green"></div>
+    <div class="bg-glow-gold"></div>
+
+    <!-- 1. INTENSE GLASS SIDEBAR -->
+    <aside class="w-64 sidebar-glass p-5 flex flex-col justify-between hidden md:flex shrink-0 h-screen z-20 relative">
+        <div class="space-y-7">
+            <!-- Logo Section -->
+            <div class="flex items-center gap-3 pb-3 border-b border-white/40">
+                <span class="text-3xl filter drop-shadow">🌾</span>
+                <h2 class="text-xl font-black text-[#142917] tracking-tight">KisanSetu</h2>
+            </div>
+
+            <nav class="space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3.5 px-4 py-3 bg-white/45 backdrop-blur-md text-[#142917] font-black text-base rounded-xl shadow-sm border-t border-l border-white/60 transition-all">
+        <span class="text-xl">📊</span> Dashboard
+    </a>
+    <a href="/products" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📦</span> Products
+    </a>
+    <a href="/orders" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📥</span> Orders
+    </a>
+    <a href="/earnings" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">💰</span> Earnings
+    </a>
+    <a href="/profile" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">👤</span> Profile
+    </a>
+</nav>
+        </div>
+
+        <!-- NEW: 3D FLOATING GLASS ORNAMENT CARD (Fills the empty space with style) -->
+        <div class="ultra-glass my-6 p-4 rounded-2xl relative overflow-hidden text-center border border-white/40 shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+            <!-- Glass gloss reflection overlay -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/30 pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white/60 backdrop-blur-md border border-white rounded-full flex items-center justify-center text-xl mx-auto mb-2 shadow-sm animate-bounce">
+                    ✨
+                </div>
+                <h4 class="text-xs font-black text-[#142917] tracking-wide uppercase">Krishi Support</h4>
+                <p class="text-[10px] text-emerald-950 font-bold mt-1 leading-normal">Need assistance with listings or market rates?</p>
+                <button id="openMarketAssistant" type="button" class="mt-3 w-full bg-[#164e29]/90 hover:bg-[#164e29] text-white text-[11px] font-black py-2 px-3 rounded-xl shadow-md transition-all border border-t border-l border-emerald-700">
+                  Get Help Now
+                </button>
+                
+            </div>
+        </div>
+
+        <!-- User Info at Absolute Bottom -->
+        <div class="border-t border-white/40 pt-4 flex flex-col gap-3 mt-auto">
+            <div class="flex items-center gap-3">
+                <div id="sidebarAvatar" class="w-10 h-10 rounded-xl bg-[#164e29] text-white flex items-center justify-center text-md font-black shadow-lg">
+                  F
+                </div>
+                <div>
+                    <p id="sidebarName" class="text-xs font-black text-gray-900 leading-tight">Farmer</p>
+                    <p id="sidebarVerified" class="text-[10px] text-emerald-950 font-extrabold mt-0.5 bg-white/50 backdrop-blur-sm px-2 py-0.5 rounded-md border border-white/60 shadow-xs">Verified Farmer</p>
+                </div>
+            </div>
+            <button id="logoutButton" class="w-full text-left text-[11px] font-black text-[#164e29] bg-white/30 hover:bg-white/60 py-3 px-4 rounded-xl border border-white/50 shadow-sm transition-all">
+                🚪 Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Market Rate Assistant Modal -->
+    <div id="marketModal" aria-hidden="true" class="hidden">
+      <div class="modal-overlay" role="presentation"></div>
+      <div id="marketPanel" class="ultra-glass rounded-2xl p-6 shadow-2xl w-full max-w-lg mx-4" role="dialog" aria-modal="true" aria-labelledby="marketTitle">
+        <div class="flex justify-between items-start mb-3">
+          <h3 id="marketTitle" class="text-lg font-black text-[#0f2112]">🌾 Market Rate Assistant</h3>
+          <button type="button" class="modal-close text-xl font-black text-emerald-900 hover:scale-110 transition-transform">✕</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Crop Selection</label>
+            <select id="cropSelect" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none">
+              <option>Wheat</option>
+              <option>Rice</option>
+              <option>Sugarcane</option>
+              <option>Tomato</option>
+              <option>Potato</option>
+              <option>Onion</option>
+              <option>Mango</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-black text-emerald-900 uppercase mb-1">Market Selection</label>
+            <select id="marketSelect" class="w-full bg-white/50 border border-white/60 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none">
+              <option>Mumbai</option>
+              <option>Pune</option>
+              <option>Nashik</option>
+              <option>Nagpur</option>
+              <option>Solapur</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <button id="checkPriceBtn" class="w-full bg-[#164e29] hover:bg-[#0f381d] text-white font-black text-sm py-2 rounded-xl shadow-md transition-all">Check Latest Price</button>
+        </div>
+
+        <div id="marketResult" class="mt-2 text-sm text-gray-900">
+          <!-- Results will be injected here -->
+          <div class="text-xs text-emerald-900 font-black mb-2">Results will appear here after checking</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. STRETCHED MAIN PAGE CONTENT -->
+    <main class="flex-1 p-6 overflow-y-auto h-screen w-full z-10 relative">
+      
+      <!-- Top Bar Area -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div>
+          <h1 class="text-3xl font-black tracking-tight text-[#0f2112]">
+            Welcome Back, Farmer Friend! 👋
+          </h1>
+          <p class="text-sm text-emerald-950/90 font-extrabold mt-1">
+            Here is what's happening with KisanSetu today.
+          </p>
+        </div>
+        
+        <!-- Weather Glass Widget -->
+        <div class="ultra-glass px-4 py-2 rounded-2xl flex items-center gap-3 self-end sm:self-auto">
+          <span class="text-2xl drop-shadow">☀️</span>
+          <div>
+            <p class="text-[10px] font-black text-emerald-900/80 uppercase tracking-widest">Today's Weather</p>
+            <p class="text-sm font-black text-[#164e29]">32°C • Clear Sky</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Dynamic Glass Cards Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <!-- Card 1 -->
+        <div class="ultra-glass p-4 rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[10px] font-black text-emerald-900/80 uppercase tracking-widest">Total Products</p>
+              <h3 id="totalProducts" class="text-2xl font-black mt-1 text-[#0f2112]">0</h3>
+            </div>
+            <span class="text-xl bg-white/40 backdrop-blur-md p-2 rounded-xl border border-white/60 shadow-sm group-hover:scale-110 transition-transform">📦</span>
+          </div>
+          <p class="text-[11px] text-emerald-950 font-black mt-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 inline-block animate-ping"></span> In Stock
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="ultra-glass p-4 rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[10px] font-black text-emerald-900/80 uppercase tracking-widest">Active Orders</p>
+              <h3 id="totalOrders" class="text-2xl font-black mt-1 text-[#0f2112]">0</h3>
+            </div>
+            <span class="text-xl bg-white/40 backdrop-blur-md p-2 rounded-xl border border-white/60 shadow-sm group-hover:scale-110 transition-transform">📥</span>
+          </div>
+          <p class="text-[11px] text-amber-950 font-black mt-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> 4 Pending Action
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="ultra-glass p-4 rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[10px] font-black text-emerald-900/80 uppercase tracking-widest">Monthly Earnings</p>
+              <h3 id="earnings" class="text-2xl font-black mt-1 text-[#0f2112]">₹0</h3>
+            </div>
+            <span class="text-xl bg-white/40 backdrop-blur-md p-2 rounded-xl border border-white/60 shadow-sm group-hover:scale-110 transition-transform">💰</span>
+          </div>
+          <p class="text-[11px] text-emerald-950 font-black mt-3 flex items-center gap-1">
+            <span class="text-emerald-700 font-black">▲</span> +12% vs last month
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="ultra-glass p-4 rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[10px] font-black text-emerald-900/80 uppercase tracking-widest">Farmer Rating</p>
+              <h3 class="text-2xl font-black mt-1 text-[#0f2112]">4.8 ★</h3>
+            </div>
+            <span class="text-xl bg-white/40 backdrop-blur-md p-2 rounded-xl border border-white/60 shadow-sm group-hover:scale-110 transition-transform">⭐</span>
+          </div>
+          <p class="text-[11px] text-emerald-950 font-black mt-3 flex items-center gap-1">
+            ★ Excellent (45 reviews)
+          </p>
+        </div>
+      </div>
+
+      <!-- 4. MIDDLE GRAPHS & ACTIONS LAYOUT -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 space-y-4">
+          <!-- Glass Chart Section with Vivid High-Contrast Image Layer -->
+          <div class="ultra-glass p-5 rounded-2xl relative overflow-hidden">
+            <div class="flex justify-between items-center mb-4 relative z-10">
+              <h2 class="text-md font-black text-[#0f2112]">Monthly Sales Overview</h2>
+              <span class="text-[11px] text-emerald-950 font-black bg-white/50 px-2 py-0.5 rounded-full border border-white/60 shadow-xs">This Year</span>
+            </div>
+            
+            <!-- Graphic Container Card -->
+            <div class="h-72 rounded-xl border border-white/30 relative overflow-hidden bg-white/10 shadow-inner">
+              <div class="relative z-10 h-full p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start gap-3">
+                  <div>
+                    <p class="text-xs font-black text-[#0f2112] uppercase tracking-widest">Monthly Sales Overview</p>
+                    <h3 id="chartSummaryLabel" class="text-lg font-black text-[#0f2112] mt-1">Live revenue and order trends</h3>
+                  </div>
+                  <span class="text-[11px] text-[#164e29] font-black bg-emerald-100/90 px-2 py-0.5 rounded-full border border-emerald-200 shadow-xs">ChartJS Engine Active</span>
+                </div>
+                <div class="mt-4 h-[240px] rounded-3xl bg-[#f7fdf6] border border-white/70 shadow-inner overflow-auto">
+                  <canvas id="salesChart" class="w-full h-full chart-canvas"></canvas>
+                </div>
+                <div id="chartNotice" class="mt-3 text-xs text-[#164e29] font-black">Loading analytics...</div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                  <div class="bg-white/90 border border-emerald-200 rounded-2xl p-3 text-xs text-[#164e29] font-black">
+                    <p class="text-[10px] uppercase tracking-widest text-emerald-900/80">This month revenue</p>
+                    <p id="chartRevenueMonth" class="text-2xl mt-1">₹0</p>
+                  </div>
+                  <div class="bg-white/90 border border-emerald-200 rounded-2xl p-3 text-xs text-[#164e29] font-black">
+                    <p class="text-[10px] uppercase tracking-widest text-emerald-900/80">Pending orders</p>
+                    <p id="chartPendingOrders" class="text-2xl mt-1">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Glass Quick Actions Block -->
+          <div class="ultra-glass p-5 rounded-2xl">
+            <h2 class="text-md font-black text-[#0f2112] mb-3">Quick Actions</h2>
+            <div class="grid grid-cols-3 gap-3">
+              <a id="quickAddProduct" href="#" class="p-3 bg-white/30 hover:bg-white/60 border border-white/50 rounded-xl text-center transition-all shadow-sm block group">
+                <span class="block text-xl mb-0.5 group-hover:scale-110 transition-transform">➕</span>
+                <span class="text-[11px] font-black text-[#164e29]">Add New Product</span>
+              </a>
+              <a id="quickShipOrders" href="#" class="p-3 bg-white/30 hover:bg-white/60 border border-white/50 rounded-xl text-center transition-all shadow-sm block group">
+                <span class="block text-xl mb-0.5 group-hover:scale-110 transition-transform">🚚</span>
+                <span class="text-[11px] font-black text-[#164e29]">Ship Orders</span>
+              </a>
+              <a id="quickDownloadReport" href="#" class="p-3 bg-white/30 hover:bg-white/60 border border-white/50 rounded-xl text-center transition-all shadow-sm block group">
+                <span class="block text-xl mb-0.5 group-hover:scale-110 transition-transform">📥</span>
+                <span class="text-[11px] font-black text-[#164e29]">Download Report</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Alerts Layout Panels -->
+        <div class="space-y-4">
+          <!-- Glass Alerts -->
+          <div class="ultra-glass p-5 rounded-2xl">
+            <h2 class="text-md font-black text-[#0f2112] mb-3">Critical Alerts</h2>
+            <div class="space-y-2">
+              <div class="p-2.5 bg-amber-100/45 backdrop-blur-md border border-amber-300/50 rounded-xl flex gap-2 items-start shadow-sm">
+                <span class="text-sm mt-0.5">⚠️</span>
+                <p class="text-[11px] text-amber-950 leading-tight font-bold">
+                  <strong>Low Inventory:</strong> Tomato supply is under 15kg.
+                </p>
+              </div>
+              <div class="p-2.5 bg-sky-100/45 backdrop-blur-md border border-sky-300/50 rounded-xl flex gap-2 items-start shadow-sm">
+                <span class="text-sm mt-0.5">🔔</span>
+                <p class="text-[11px] text-sky-950 leading-tight font-bold">
+                  <strong>Payout Cleared:</strong> ₹5,200 processed successfully.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Glass Recent Orders -->
+          <div class="ultra-glass p-5 rounded-2xl">
+            <div class="flex justify-between items-center mb-3">
+              <h2 class="text-md font-black text-[#0f2112]">Recent Orders</h2>
+              <a href="#" class="text-[11px] text-[#164e29] font-black hover:underline">View All</a>
+            </div>
+            
+            <div id="recentOrdersList" class="divide-y divide-white/20">
+              <div class="py-4 text-xs font-black text-[#164e29]">Loading recent orders...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+     <script>
+async function loadDashboard() {
+    const token = localStorage.getItem("token");
+
+    console.log("TOKEN:", token);
+
+    const res = await fetch("/api/dashboard", {
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    console.log("STATUS:", res.status);
+
+    const data = await res.json();
+
+    console.log("DATA:", data);
+
+    document.getElementById("totalProducts").innerText =
+        data.total_products || 0;
+
+    document.getElementById("totalOrders").innerText =
+        data.total_orders || 0;
+
+    document.getElementById("earnings").innerText =
+        "₹" + (data.earnings || 0);
+}
+
+function formatCurrency(value) {
+    return `₹${Number(value || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+}
+
+function getMonthLabels() {
+    return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+}
+
+function renderSalesChart(monthlyRevenue, monthlyOrders) {
+    const canvas = document.getElementById('salesChart');
+    const chartNotice = document.getElementById('chartNotice');
+    if (!canvas) {
+        console.warn('Sales chart canvas missing');
+        if (chartNotice) chartNotice.innerText = 'Chart canvas missing.';
+        return;
+    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.warn('Chart context unavailable');
+        if (chartNotice) chartNotice.innerText = 'Unable to initialize chart.';
+        return;
+    }
+    // Keep canvas dimension matched to its container for reliable rendering
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    if (window.salesChart) {
+        window.salesChart.destroy();
+    }
+    window.salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: getMonthLabels(),
+            datasets: [
+                {
+                    label: 'Revenue (₹)',
+                    data: monthlyRevenue,
+                    borderColor: '#166e32',
+                    backgroundColor: 'rgba(22, 110, 50, 0.25)',
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#166e32'
+                },
+                {
+                    label: 'Shipped Orders',
+                    data: monthlyOrders,
+                    borderColor: '#0f4a8b',
+                    backgroundColor: 'rgba(15, 74, 139, 0.18)',
+                    borderWidth: 2,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0f4a8b'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#0f2112',
+                        font: { weight: '800' }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            if (ctx.dataset.label.includes('Revenue')) {
+                                return `${ctx.dataset.label}: ₹${Number(ctx.parsed.y).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+                            }
+                            return `${ctx.dataset.label}: ${ctx.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#0f2112' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255,255,255,0.14)' },
+                    ticks: { color: '#0f2112' }
+                }
+            }
+        }
+    });
+}
+
+async function loadSalesAnalytics() {
+    const token = localStorage.getItem('token');
+    const noticeEl = document.getElementById('chartNotice');
+    renderSalesChart(Array(12).fill(0), Array(12).fill(0));
+    if (noticeEl) noticeEl.innerText = 'Loading analytics...';
+
+    if (!token) {
+        if (noticeEl) noticeEl.innerText = 'Login to see live analytics.';
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/earnings', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (!res.ok) {
+            if (noticeEl) noticeEl.innerText = 'Unable to load analytics.';
+            return;
+        }
+
+        const analytics = await res.json();
+        const monthly = analytics.monthly || [];
+        const orders = analytics.orders || [];
+
+        const monthCounts = new Array(12).fill(0);
+        orders.forEach(order => {
+            const shipped_at = order.shipped_at || order.created_at;
+            let dateObj = null;
+            if (typeof shipped_at === 'string') {
+                dateObj = new Date(shipped_at);
+            } else if (shipped_at) {
+                dateObj = new Date(shipped_at);
+            }
+            if (dateObj && !Number.isNaN(dateObj.getTime())) {
+                monthCounts[dateObj.getMonth()] += 1;
+            }
+        });
+
+        if (!monthly || monthly.length === 0) {
+            if (noticeEl) noticeEl.innerText = 'No earnings data available yet.';
+        } else {
+            if (noticeEl) noticeEl.innerText = '';
+        }
+
+        renderSalesChart(monthly.length ? monthly : Array(12).fill(0), monthCounts);
+        document.getElementById('chartRevenueMonth').innerText = formatCurrency(analytics.month);
+        const ordersData = await fetch('/api/orders', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (ordersData.ok) {
+            const data = await ordersData.json();
+            document.getElementById('chartPendingOrders').innerText = String(data.filter(o => String(o.status || '').toLowerCase() === 'pending').length);
+        }
+    } catch (err) {
+        console.error('Analytics load failed', err);
+        if (noticeEl) noticeEl.innerText = 'Analytics load failed.';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadDashboard();
+    loadSalesAnalytics();
+    loadRecentOrders();
+    initDashboardQuickActions();
+});
+
+async function loadRecentOrders() {
+    const token = localStorage.getItem('token');
+    const container = document.getElementById('recentOrdersList');
+    if (!container) return;
+
+    container.innerHTML = '<div class="py-4 text-xs font-black text-[#164e29]">Loading recent orders...</div>';
+    if (!token) {
+        container.innerHTML = '<div class="py-4 text-xs font-black text-[#164e29]">Login to view recent orders.</div>';
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/orders', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+            container.innerHTML = '<div class="py-4 text-xs font-black text-[#164e29]">Unable to load recent orders.</div>';
+            return;
+        }
+
+        const orders = await res.json();
+        if (!orders.length) {
+            container.innerHTML = '<div class="py-4 text-xs font-black text-[#164e29]">No recent orders found.</div>';
+            return;
+        }
+
+        const recent = orders.slice(-4).reverse();
+        container.innerHTML = recent.map(order => {
+            const status = String(order.status || '').toLowerCase();
+            const badgeClass = status === 'pending'
+                ? 'bg-orange-200/60 text-orange-950 border-orange-300/40'
+                : status === 'shipped' || status === 'delivered'
+                    ? 'bg-emerald-200/60 text-emerald-950 border-emerald-300/40'
+                    : 'bg-slate-200/60 text-slate-900 border-slate-300/40';
+            const cropLabel = order.crop_name || order.product_name || 'Crop';
+            const qty = order.quantity != null ? `${order.quantity} kg` : 'Qty N/A';
+            return `
+                <div class="py-2.5 flex justify-between items-center first:pt-0 last:pb-0">
+                    <div>
+                        <p class="text-xs font-black text-gray-900">${order.customer_name || 'Customer'}</p>
+                        <p class="text-[10px] text-emerald-950 font-bold">${cropLabel} • ${qty}</p>
+                    </div>
+                    <span class="text-[9px] px-2 py-0.5 rounded-md font-black ${badgeClass} shadow-xs">${(order.status || 'Unknown').replace(/^[a-z]/, c => c.toUpperCase())}</span>
+                </div>`;
+        }).join('');
+    } catch (err) {
+        console.error('Failed to load recent orders', err);
+        container.innerHTML = '<div class="py-4 text-xs font-black text-[#164e29]">Failed to load recent orders.</div>';
+    }
+}
+
+async function downloadReport() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please login to download the report.');
+        window.location.href = '/login';
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/dashboard/report?format=pdf', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (res.ok) {
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kisansetu_dashboard_report.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            return;
+        }
+
+        if (res.status === 401) {
+            alert('Session expired. Please login again.');
+            window.location.href = '/login';
+            return;
+        }
+
+        const errorData = await res.json().catch(() => ({}));
+        console.warn('PDF report generation failed, falling back to CSV', errorData);
+    } catch (err) {
+        console.warn('PDF report request failed, falling back to CSV', err);
+    }
+
+    // Fallback to frontend CSV export
+    await exportDashboardCSV();
+}
+
+async function exportDashboardCSV() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please login to export the report.');
+        window.location.href = '/login';
+        return;
+    }
+
+    const [dashboardRes, ordersRes] = await Promise.all([
+        fetch('/api/dashboard', { headers: { 'Authorization': 'Bearer ' + token } }),
+        fetch('/api/orders', { headers: { 'Authorization': 'Bearer ' + token } })
+    ]);
+
+    if (!dashboardRes.ok || !ordersRes.ok) {
+        if (dashboardRes.status === 401 || ordersRes.status === 401) {
+            alert('Session expired. Please login again.');
+            window.location.href = '/login';
+            return;
+        }
+        alert('Unable to fetch report data.');
+        return;
+    }
+
+    const dashboard = await dashboardRes.json();
+    const orders = await ordersRes.json();
+
+    const rows = [
+        ['Farmer Name', dashboard.farmer_name || 'Farmer'],
+        ['Total Products', dashboard.total_products || 0],
+        ['Total Orders', dashboard.total_orders || 0],
+        ['Total Earnings', dashboard.earnings != null ? dashboard.earnings : 0],
+        [],
+        ['Order ID', 'Customer', 'Crop', 'Quantity', 'Gross Value', 'Status']
+    ];
+
+    orders.forEach(order => {
+        rows.push([
+            order.order_id || '',
+            order.customer_name || '',
+            order.crop_name || '',
+            order.quantity || '',
+            order.gross_value != null ? order.gross_value : '',
+            order.status || ''
+        ]);
+    });
+
+    const csvContent = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'kisansetu_dashboard_report.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+function initDashboardQuickActions() {
+    const addBtn = document.getElementById('quickAddProduct');
+    const shipBtn = document.getElementById('quickShipOrders');
+    const reportBtn = document.getElementById('quickDownloadReport');
+
+    if (addBtn) {
+        addBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/products?add=1';
+        });
+    }
+
+    if (shipBtn) {
+        shipBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/orders?filter=pending';
+        });
+    }
+
+    if (reportBtn) {
+        reportBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            downloadReport();
+        });
+    }
+}
+</script>
+
+<script>
+// Market Rate Assistant demo data and handlers
+const demoRates = {
+  "Wheat": {
+    "Mumbai": {min:1200, max:1500, avg:1350, trend:'Rising', last_updated: new Date().toISOString()},
+    "Pune": {min:1180, max:1480, avg:1330, trend:'Stable', last_updated: new Date().toISOString()},
+    "Nashik": {min:1150, max:1400, avg:1275, trend:'Falling', last_updated: new Date().toISOString()}
+  },
+  "Rice": {
+    "Mumbai": {min:2200, max:2500, avg:2350, trend:'Stable', last_updated: new Date().toISOString()},
+    "Pune": {min:2100, max:2450, avg:2275, trend:'Rising', last_updated: new Date().toISOString()}
+  },
+  "Sugarcane": {
+    "Solapur": {min:18, max:20, avg:19, trend:'Stable', last_updated: new Date().toISOString()},
+    "Nagpur": {min:17, max:21, avg:19, trend:'Rising', last_updated: new Date().toISOString()}
+  },
+  "Tomato": {"Mumbai": {min:30, max:60, avg:45, trend:'Falling', last_updated: new Date().toISOString()}},
+  "Potato": {"Pune": {min:12, max:20, avg:16, trend:'Stable', last_updated: new Date().toISOString()}},
+  "Onion": {"Nagpur": {min:25, max:40, avg:32.5, trend:'Rising', last_updated: new Date().toISOString()}},
+  "Mango": {"Solapur": {min:80, max:150, avg:115, trend:'Rising', last_updated: new Date().toISOString()}}
+};
+
+function toggleMarketModal(show){
+  const modal = document.getElementById('marketModal');
+  const panel = document.getElementById('marketPanel');
+  if(show){
+    modal.classList.add('show'); modal.classList.remove('hidden');
+    setTimeout(()=>panel.classList.add('show'),20);
+    document.body.style.overflow = 'hidden';
+  } else {
+    panel.classList.remove('show');
+    setTimeout(()=>{ modal.classList.remove('show'); modal.classList.add('hidden'); document.body.style.overflow = ''; },240);
+  }
+}
+
+function renderMarketResult(data, crop, market){
+  const container = document.getElementById('marketResult');
+  if(!data){
+    container.innerHTML = `<div class="p-3 bg-white/50 rounded-xl text-sm font-black text-[#164e29]">No market data available for <strong>${crop}</strong> in <strong>${market}</strong>.</div>`;
+    return;
+  }
+
+  const trendClass = data.trend === 'Rising' ? 'trend-rising' : (data.trend==='Falling' ? 'trend-falling' : 'trend-stable');
+
+  container.innerHTML = `
+    <div class="market-result-row"><div class="text-xs font-black text-gray-700">Minimum Price</div><div class="text-sm font-black text-[#164e29]">${data.min}</div></div>
+    <div class="market-result-row"><div class="text-xs font-black text-gray-700">Maximum Price</div><div class="text-sm font-black text-[#164e29]">${data.max}</div></div>
+    <div class="market-result-row"><div class="text-xs font-black text-gray-700">Average Price</div><div class="text-sm font-black text-[#164e29]">${data.avg}</div></div>
+    <div class="market-result-row"><div class="text-xs font-black text-gray-700">Trend</div><div><span class="trend-badge ${trendClass}">${data.trend}</span></div></div>
+    <div class="market-result-row"><div class="text-xs font-black text-gray-700">Last Updated</div><div class="text-sm text-gray-600">${new Date(data.last_updated).toLocaleString()}</div></div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const openBtn = document.getElementById('openMarketAssistant');
+  const modal = document.getElementById('marketModal');
+  const closeEls = modal.querySelectorAll('.modal-close');
+
+  openBtn.addEventListener('click', ()=> toggleMarketModal(true));
+  modal.addEventListener('click', (e)=>{ if(e.target.id==='marketModal' || e.target.classList.contains('modal-overlay')) toggleMarketModal(false); });
+  closeEls.forEach(b=>b.addEventListener('click', ()=> toggleMarketModal(false)));
+
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMarketModal(false); });
+
+  document.getElementById('checkPriceBtn').addEventListener('click', ()=>{
+    const crop = document.getElementById('cropSelect').value;
+    const market = document.getElementById('marketSelect').value;
+    const entry = (demoRates[crop] && demoRates[crop][market]) || null;
+    renderMarketResult(entry, crop, market);
+  });
+});
+</script>
+<script src="/static/js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .attractive-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+        .glow-effect { box-shadow: 0 0 20px rgba(180, 210, 180, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen bg-cover bg-center p-6 flex flex-col items-center justify-center" 
+      style="background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <!-- Container ko limit kar diya hai taaki wo puri screen na le -->
+    <div class="w-full max-w-lg mx-auto"> 
+
+        <!-- Header Panel -->
+        <div class="attractive-glass glow-effect rounded-3xl p-6 mb-6 flex items-center gap-6">
+            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=300&q=80" class="w-20 h-20 rounded-2xl object-cover border border-white/50">
+            <div>
+                <h1 class="text-2xl font-black text-[#1a2e1d] tracking-tight">KisanSetu 🌾</h1>
+                <p class="text-[#1a2e1d]/80 font-bold text-sm">Direct Farm To Customer</p>
+            </div>
+        </div>
+
+        <!-- Login Panel -->
+        <div class="attractive-glass rounded-3xl p-8 shadow-2xl">
+            <h2 class="text-2xl font-black text-[#1a2e1d] mb-6 text-center">Welcome 🙏</h2>
+            
+            <form onsubmit="event.preventDefault(); loginUser();" class="space-y-4"></form>
+             <form onsubmit="event.preventDefault(); loginUser();" class="space-y-4">
+
+    <input
+        id="mobile"
+        type="text"
+        placeholder="Mobile Number"
+        class="w-full p-3 rounded-xl bg-white/30 border border-white/50 outline-none focus:ring-2 focus:ring-[#164e29]/20 placeholder-[#1a2e1d]/50">
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        class="w-full p-3 rounded-xl bg-white/30 border border-white/50 outline-none focus:ring-2 focus:ring-[#164e29]/20 placeholder-[#1a2e1d]/50">
+
+    <button
+        type="submit"
+        class="w-full bg-[#164e29] text-white font-black py-3 rounded-xl hover:bg-[#113d21] transition shadow-lg">
+        Login
+    </button>
+
+</form>  
+                
+            <p class="text-center text-[#1a2e1d] font-bold mt-4 text-sm">
+                New here? <a href="/register" class="text-[#164e29] underline">Create Account</a>
+            </p>
+        </div>
+    </div>
+
+   <script>
+async function loginUser() {
+
+    const mobile = document.getElementById("mobile").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            mobile,
+            password
+        })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("name", data.name);
+
+        alert("Login successful 🚀");
+        window.location.href = "/dashboard";
+    } else {
+        alert(data.message);
+    }
+}
+</script>
+</body>
+</html>

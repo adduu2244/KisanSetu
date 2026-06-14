@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanSetu - Financial Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body class="min-h-screen text-[#1a2e1d] font-sans flex overflow-hidden relative bg-cover bg-center bg-no-repeat bg-fixed" 
+      style="background-image: linear-gradient(rgba(220, 240, 228, 0.75), rgba(220, 240, 228, 0.8)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <div class="bg-glow-green"></div>
+    <div class="bg-glow-gold"></div>
+
+    <!-- 1. IDENTICAL GLASS SIDEBAR -->
+    <aside class="w-64 sidebar-glass p-5 flex flex-col justify-between hidden md:flex shrink-0 h-screen z-20 relative">
+        <div class="space-y-7">
+            <div class="flex items-center gap-3 pb-3 border-b border-white/40">
+                <span class="text-3xl filter drop-shadow">🌾</span>
+                <h2 class="text-xl font-black text-[#142917] tracking-tight">KisanSetu</h2>
+            </div>
+
+          <nav class="space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📊</span> Dashboard
+    </a>
+    <a href="/products" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📦</span> Products
+    </a>
+    <a href="/orders" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">📥</span> Orders
+    </a>
+    <a href="/earnings" class="flex items-center gap-3.5 px-4 py-3 bg-white/45 backdrop-blur-md text-[#142917] font-black text-base rounded-xl shadow-sm border-t border-l border-white/60 transition-all">
+        <span class="text-xl">💰</span> Earnings
+    </a>
+    <a href="/profile" class="flex items-center gap-3.5 px-4 py-3 text-gray-900 hover:bg-white/30 hover:text-[#164e29] font-black text-base rounded-xl transition-all border border-transparent hover:border-white/30">
+        <span class="text-xl">👤</span> Profile
+    </a>
+</nav>
+        </div>
+
+        <div class="ultra-glass my-6 p-4 rounded-2xl relative overflow-hidden text-center border border-white/40 shadow-xl">
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white/60 backdrop-blur-md border border-white rounded-full flex items-center justify-center text-xl mx-auto mb-2 shadow-sm">✨</div>
+                <h4 class="text-xs font-black text-[#142917] tracking-wide uppercase">Krishi Support</h4>
+                <p class="text-[10px] text-emerald-950 font-bold mt-1 leading-normal">Need assistance with listings or market rates?</p>
+                <button class="mt-3 w-full bg-[#164e29]/90 hover:bg-[#164e29] text-white text-[11px] font-black py-2 px-3 rounded-xl shadow-md transition-all border border-t border-l border-emerald-700">Get Help Now</button>
+            </div>
+        </div>
+
+        <div class="border-t border-white/40 pt-4 flex flex-col gap-3 mt-auto">
+            <div class="flex items-center gap-3">
+                <div id="sidebarAvatar" class="w-10 h-10 rounded-xl bg-[#164e29] text-white flex items-center justify-center text-md font-black shadow-lg">F</div>
+                <div>
+                    <p id="sidebarName" class="text-xs font-black text-gray-900 leading-tight">Farmer</p>
+                    <p id="sidebarVerified" class="text-[10px] text-emerald-950 font-extrabold mt-0.5 bg-white/50 backdrop-blur-sm px-2 py-0.5 rounded-md border border-white/60 shadow-xs">Verified Farmer</p>
+                </div>
+            </div>
+            <button id="logoutButton" class="w-full text-left text-[11px] font-black text-[#164e29] bg-white/30 hover:bg-white/60 py-3 px-4 rounded-xl border border-white/50 shadow-sm transition-all">
+                🚪 Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- 2. REVENUE ANALYSIS MAIN CONTAINER -->
+    <main class="flex-1 p-6 overflow-y-auto h-screen w-full z-10 relative">
+        
+        <!-- SIDE-BY-SIDE HEADER LAYOUT -->
+        <div class="w-full flex flex-row justify-between items-center mb-8 gap-6">
+            
+            <!-- FIXED WIDTH HORIZONTAL GLASS BOX HEADING -->
+            <div class="ultra-glass p-5 rounded-2xl border border-white/40 shadow-md w-full max-w-xl shrink">
+                <h1 class="text-2xl font-black tracking-tight text-[#0f2112]">Financial Ledger</h1>
+                <p class="text-xs text-emerald-950/90 font-extrabold mt-1.5 hidden sm:block leading-relaxed">
+                    Audit daily yields, analyze payout records, and handle bank remittance channels.
+                </p>
+            </div>
+            
+            <!-- LOCKED CONTENT-SIZED SMALL EXPORT BUTTON -->
+            <button id="exportTaxBtn" class="w-fit bg-[#164e29] hover:bg-[#0f381d] text-white px-4 py-2.5 rounded-xl font-black text-xs tracking-wide transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-emerald-950/10 active:scale-95 border-t border-l border-emerald-500/50 shrink-0 whitespace-nowrap h-fit">
+                <span class="text-xs">📥</span> Export Tax Statement
+            </button>
+        </div>
+
+        <!-- 3. FINANCIAL SNAPSHOT CARDS -->
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 clear-both">
+            
+            <!-- Today's Crop Yield Revenue -->
+            <div id="earningsCards" class="ultra-glass p-5 rounded-2xl relative overflow-hidden group border border-white/40 shadow-md">
+                <p class="text-[10px] font-black text-emerald-900/70 uppercase tracking-widest">Today's Earnings</p>
+                <h2 id="todayEarnings" class="text-3xl font-black text-[#0f2112] mt-1">₹0.00</h2>
+                <p id="todaySub" class="text-[11px] text-emerald-950 font-bold mt-2 bg-emerald-300/20 inline-block px-2 py-0.5 rounded-md border border-emerald-400/20">&nbsp;</p>
+            </div>
+
+            <!-- Current Month Total -->
+            <div class="ultra-glass p-5 rounded-2xl relative overflow-hidden group border border-white/40 shadow-md">
+                <p class="text-[10px] font-black text-emerald-900/70 uppercase tracking-widest">This Month's Earnings</p>
+                <h2 id="monthEarnings" class="text-3xl font-black text-[#164e29] mt-1">₹0.00</h2>
+                <p id="monthSub" class="text-[11px] text-emerald-950 font-bold mt-2 bg-emerald-300/20 inline-block px-2 py-0.5 rounded-md border border-emerald-400/20">&nbsp;</p>
+            </div>
+
+            <!-- Absolute Lifetime Balance -->
+            <div class="ultra-glass p-5 rounded-2xl relative overflow-hidden group border border-white/40 shadow-md sm:col-span-2 lg:col-span-1">
+                <p class="text-[10px] font-black text-emerald-900/70 uppercase tracking-widest">Total Net Earnings</p>
+                <h2 id="totalEarnings" class="text-3xl font-black text-gray-900 mt-1">₹0.00</h2>
+                <p id="totalSub" class="text-[11px] text-emerald-950 font-bold mt-2 bg-emerald-300/20 inline-block px-2 py-0.5 rounded-md border border-emerald-400/20">&nbsp;</p>
+            </div>
+
+        </div>
+
+        <!-- 4. LIVE CHART INFRASTRUCTURE -->
+        <div class="w-full block ultra-glass p-6 rounded-2xl border border-white/40 shadow-xl mb-6 clear-both">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-md font-black text-[#0f2112]">Revenue Scaling Curve</h3>
+                    <p class="text-[11px] text-emerald-950 font-semibold">Granular transaction analytics mapped across historical calendar cycles.</p>
+                </div>
+                <span class="text-[10px] font-black bg-white/50 border border-white/60 px-3 py-1 rounded-full shadow-xs">Live System Sync</span>
+            </div>
+
+            <div class="w-full relative h-72">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem('token');
+            const exportBtn = document.getElementById('exportTaxBtn');
+
+            async function loadEarnings() {
+                if (!token) {
+                    // No token - show empty state
+                    showNoEarnings();
+                    return;
+                }
+
+                try {
+                    const res = await fetch('/api/earnings', { headers: { 'Authorization': 'Bearer ' + token } });
+                    if (!res.ok) {
+                        console.error('Earnings fetch failed');
+                        showNoEarnings();
+                        return;
+                    }
+
+                    const data = await res.json();
+                    renderEarnings(data);
+                } catch (err) {
+                    console.error('Earnings load error', err);
+                    showNoEarnings();
+                }
+            }
+
+            function currency(v) {
+                return '₹' + (Number(v) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function showNoEarnings() {
+                const cards = document.getElementById('earningsCards');
+                cards.innerHTML = `<div class="p-8 text-center text-sm font-black text-gray-800">No earnings available yet</div>`;
+                const canvas = document.getElementById('revenueChart');
+                if (canvas) {
+                    canvas.parentElement.innerHTML = `<div class="p-8 text-center text-sm font-black text-gray-800">No earnings available yet</div>`;
+                }
+            }
+
+            let revenueChart = null;
+
+            function renderEarnings(data) {
+                const today = data.today || 0;
+                const month = data.month || 0;
+                const total = data.total || 0;
+                const monthly = data.monthly || [];
+                const orders = data.orders || [];
+
+                // If there are no shipped orders, show friendly message
+                if (!orders.length || total === 0) {
+                    showNoEarnings();
+                    return;
+                }
+
+                document.getElementById('todayEarnings').textContent = currency(today);
+                document.getElementById('todaySub').textContent = `From ${orders.filter(o => o.shipped_at && new Date(o.shipped_at).toDateString() === new Date().toDateString()).length} shipped orders today`;
+                document.getElementById('monthEarnings').textContent = currency(month);
+                document.getElementById('monthSub').textContent = `${orders.filter(o => o.shipped_at && new Date(o.shipped_at).getMonth() === new Date().getMonth()).length} shipped orders this month`;
+                document.getElementById('totalEarnings').textContent = currency(total);
+                document.getElementById('totalSub').textContent = `${orders.length} shipped orders total`;
+
+                // Build chart
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                const revenueGradient = ctx.createLinearGradient(0, 0, 0, 300);
+                revenueGradient.addColorStop(0, 'rgba(22, 78, 41, 0.25)');
+                revenueGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+                const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                const chartData = (monthly.length === 12) ? monthly : monthly.concat(Array(12-monthly.length).fill(0));
+
+                if (revenueChart) {
+                    revenueChart.data.labels = labels;
+                    revenueChart.data.datasets[0].data = chartData;
+                    revenueChart.update();
+                } else {
+                    revenueChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Gross Profit (₹)',
+                                data: chartData,
+                                borderColor: '#164e29',
+                                borderWidth: 3.5,
+                                pointBackgroundColor: '#ffffff',
+                                pointBorderColor: '#164e29',
+                                pointBorderWidth: 2.5,
+                                pointRadius: 5,
+                                pointHoverRadius: 8,
+                                tension: 0.38,
+                                fill: true,
+                                backgroundColor: revenueGradient
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { grid: { display: false }, ticks: { color: '#164e29', font: { weight: '800', size: 11 } } },
+                                y: { grid: { color: 'rgba(255, 255, 255, 0.3)' }, ticks: { color: '#164e29', font: { weight: '800', size: 10 }, callback: value => '₹' + value.toLocaleString() } }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Export handler
+            exportBtn.addEventListener('click', async function () {
+                if (!token) { alert('Please login to export.'); return; }
+                try {
+                    const res = await fetch('/api/earnings/export', { headers: { 'Authorization': 'Bearer ' + token } });
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        alert(err.message || 'Unable to generate tax statement.');
+                        return;
+                    }
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'kisansetu_tax_statement.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                } catch (err) {
+                    console.error('Export failed', err);
+                    alert('Unable to export tax statement.');
+                }
+            });
+
+            loadEarnings();
+        });
+    </script>
+    <script src="/static/js/sidebar.js"></script>
+</body>
+</html>

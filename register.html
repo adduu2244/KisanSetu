@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - KisanSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .ultra-glass {
+            background: rgba(255, 255, 255, 0.22) !important;
+            backdrop-filter: blur(24px) saturate(210%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 12px 35px 0 rgba(15, 38, 22, 0.12) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#e8f5e9] flex items-center justify-center p-6" 
+      style="background-image: linear-gradient(rgba(220, 240, 228, 0.75), rgba(220, 240, 228, 0.8)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');">
+
+    <div class="w-full max-w-sm ultra-glass rounded-3xl p-8 shadow-2xl">
+        <h1 class="text-2xl font-black text-[#1a2e1d] mb-2">Create Account 🌾</h1>
+        <p class="text-sm font-bold text-[#1a2e1d]/70 mb-6">Join the KisanSetu community today.</p>
+        
+        <form id="registerForm" class="space-y-4">
+            <input id="name" type="text" placeholder="Full Name" class="w-full p-3 rounded-xl bg-white/50 border border-white/50 outline-none placeholder-[#1a2e1d]/50">
+            <input id="mobile" type="text" placeholder="Mobile Number" class="w-full p-3 rounded-xl bg-white/50 border border-white/50 outline-none placeholder-[#1a2e1d]/50">
+            <input id="password" type="password" placeholder="Set Password" class="w-full p-3 rounded-xl bg-white/50 border border-white/50 outline-none placeholder-[#1a2e1d]/50">
+            
+            <button type="submit" class="w-full bg-[#164e29] text-white font-black py-3 rounded-xl hover:bg-[#113d21] transition shadow-lg">
+                Register
+            </button>
+        </form>
+            
+        <p class="text-center text-[#1a2e1d] font-bold mt-6 text-sm">
+            Already have an account? <a href="/login" class="text-[#164e29] underline">Login here</a>
+        </p>
+    </div>
+
+    <script>
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const mobile = document.getElementById('mobile').value;
+    const password = document.getElementById('password').value;
+
+    const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name,
+            mobile,
+            password
+        })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        alert("Registration Successful 🚀");
+        window.location.href = "/login";
+    }else{
+        alert(data.message);
+    }
+});
+</script>
+</body>
+</html>
